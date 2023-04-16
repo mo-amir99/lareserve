@@ -1,0 +1,38 @@
+.footer {
+  padding: 1% 5%;
+  margin-top: 4rem;
+  text-align: center;
+  background-color: #212529;
+  box-shadow: 0 8px 22px rgb(2, 4, 24, 0.4);
+}
+
+.footer-social-text {
+  font-size: x-large;
+  color: white;
+  font-weight: 500;
+}
+
+.footer-link {
+  text-decoration: none;
+  color: white;
+  margin: 0% 1.5rem;
+}
+
+.footer-link i {
+  font-size: 1.5rem;
+}
+
+.footer a:hover {
+  color: teal;
+}
+
+.footer-link {
+  text-decoration: none;
+  /* color: #8d8c8c; */
+  color: white;
+  margin: 0% 1.5rem;
+}
+
+.footer-cr {
+  color: white;
+}

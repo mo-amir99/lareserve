@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Réserve</title>
+
+    <link rel="icon" href="logo.ico" type="image/x-icon" />
+    <!-- <link rel="stylesheet" href="css/nav.css" /> -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat&family=Ubuntu:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/3f051a4d8d.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="/"
+          ><span class="logo"
+            ><img class="logo-img" src="logo.ico" alt="" /></span
+          ><span class="logo-text"> <b>La Réserve</b></span></a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarex"
+          aria-controls="navbarex"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarex">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="#features">Features</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#pricing">Pricing</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                >Account</a
+              >
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="/login">Login</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/register">Sign up</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="main-text">
+      <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+          <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">La Réserve organization scheduler</h1>
+            <p class="lead text-muted">
+              Manage schedules, appointments and meetings efficiently by
+              providing a user-friendly interface that enables users to view,
+              create, and edit schedules as well as send notifications to
+              participants, made for organizations of all sizes, enhancing
+              productivity and keeping them on track.
+            </p>
+            <p>
+              <a href="/register" class="btn btn-primary my-2"
+                >Start your free trial now!</a
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="bgd">
+      <section id="features">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-4 co2 text-dark">
+              <i class="fas fa-check-circle iconn"></i>
+              <h3>User Friendly interface.</h3>
+              <p>Easy to use with no special knowledge requirements!</p>
+            </div>
+            <div class="col-md-4 co2 text-dark">
+              <i class="fas fa-solid fa-mobile iconn"></i>
+              <h3>Mobile Compatibility</h3>
+              <p>Continue where you left from your mobile or tablet.</p>
+            </div>
+            <div class="col-md-4 co2 text-dark">
+              <i class="fas fa-solid fa-tags iconn"></i>
+              <h3>Exclusive Deals.</h3>
+              <p>
+                Keep an eye on our exclusive deals and discounts for the best
+                value!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="pricing">
+      <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+        <h1 class="display-4 fw-normal">Pricing</h1>
+        <hr />
+        <p class="fs-5 text-muted">
+          Choose from our packages what fits your organization needs.
+        </p>
+      </div>
+
+      <div class="row row-cols-1 row-cols-md-3 mb-3 text-right">
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Free</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">
+                $0<small class="text-muted fw-light">/mo</small>
+              </h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>- 1 Organization per account</li>
+                <li>- limit of 5 rooms/divisions</li>
+                <li>- Email support</li>
+                <li>-</li>
+              </ul>
+              <button
+                type="button"
+                onclick="window.location='/register'"
+                class="w-100 btn btn-lg btn-outline-primary"
+              >
+                Start your free trial!
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Basic</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">
+                $5<small class="text-muted fw-light">/mo</small>
+              </h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>- 1 Organization per account</li>
+                <li>- limit of 20 rooms/divisions</li>
+                <li>- email support</li>
+                <li>- Notifications for participants</li>
+              </ul>
+              <button
+                type="button"
+                onclick="window.location='/register'"
+                class="w-100 btn btn-lg btn-primary"
+              >
+                Subscribe now!
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Pro</h4>
+            </div>
+            <div class="card-body">
+              <h1 class="card-title pricing-card-title">
+                $15<small class="text-muted fw-light">/mo</small>
+              </h1>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>- Unlimited no. of organizations</li>
+                <li>- Unlimited rooms/divisions</li>
+                <li>- Priority email support</li>
+                <li>- Notifications for participants</li>
+              </ul>
+              <button
+                type="button"
+                onclick="window.location='/register'"
+                class="w-100 btn btn-lg btn-primary"
+              >
+                Subscribe now!
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="testimonials">
+      <div
+        id="testimonialscarousel"
+        class="carousel slide"
+        data-ride="carousel"
+      >
+        <div class="pricing-header pb-md-4 mx-auto text-right testimon">
+          <h1 class="display-4 fw-normal">Customer Testimonials</h1>
+          <hr />
+          <p class="fs-5 text-muted">
+            We value our loyal customer testimonials from all over the world.
+          </p>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <h2>
+              I've been using La Réserve for my small business and it has been a
+              game changer! The platform is easy to use and has saved me so much
+              time and hassle in managing our meeting rooms. Highly recommend!
+            </h2>
+            <img class="testimonial-image" src="images/lady2.jpg" />
+            <em>Ottawa, Canada</em>
+          </div>
+          <div class="carousel-item">
+            <h2 class="testimonial-text">
+              La Réserve has been a lifesaver for my event planning business.
+              The ability to easily manage multiple event spaces and schedules
+              in one place has made my job so much easier. Highly recommend to
+              anyone in the event industry!
+            </h2>
+            <img class="testimonial-image" src="images/lady-img.jpg" />
+            <em>Paris, France</em>
+          </div>
+          <div class="carousel-item">
+            <h2 class="testimonial-text">
+              As a property manager, I was struggling to keep track of all my
+              apartment availability and scheduling. But with La Réserve, it's
+              been a breeze! The interface is intuitive and user-friendly, and I
+              love the customizable features that allow me to tailor the
+              platform to my needs.
+            </h2>
+            <img class="testimonial-image" src="images/jonas.jpg" />
+            <em>Alexandria, Egypt</em>
+          </div>
+        </div>
+        <a
+          class="carousel-control-prev"
+          href="#testimonialscarousel"
+          role="button"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#testimonialscarousel"
+          role="button"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </a>
+      </div>
+    </section>
+
+    <div class="ab">
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 ab_contact card">
+          <div class="ab_text" style="text-align: center; bottom: 1rem">
+            <h3 class="mb-3"><b>Refund Policy</b></h3>
+            <p class="text-dark">
+              We offer a 15-day money-back guarantee from the date of purchase.
+              If you are not satisfied with our service, you can request a
+              refund within 15 days of your purchase. Please note that any
+              request for a refund must be made in writing. Additionally, we
+              offer a free trial period of 10 days, during which you can use our
+              product and assess if it meets your requirements. If you decide
+              not to continue with our service after the trial period, you will
+              not be charged.
+            </p>
+            <p class="mb-1"></p>
+            <a href="/register" class="btn btn-lg btn-primary"
+              >Start your free trial now!</a
+            >
+          </div>
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+    </div>
+
+    <form
+      id="contact"
+      class="form"
+      action="https://formspree.io/f/xlekpnob"
+      method="POST"
+    >
+      <h1 class="contact">Contact us</h1>
+      <hr />
+      <p></p>
+      <div class="row">
+        <div class="col-6 col-sm-4 col-lg-3">
+          <label for="fname" class="form-label">First Name</label>
+          <input
+            name="firstname"
+            type="text"
+            class="form-control"
+            id="fname"
+            required
+          />
+        </div>
+        <div class="col-6 col-sm-4 col-lg-3">
+          <label for="lname" class="form-label">Last Name</label>
+          <input
+            name="lastname"
+            type="text"
+            class="form-control"
+            id="lname"
+            required
+          />
+        </div>
+      </div>
+      <p></p>
+      <div class="col-12 col-sm-8 col-lg-6">
+        <label for="phone" class="form-label"
+          >Phone Number <span class="opt">(Optional)</span></label
+        >
+        <input name="phone" type="tel" class="form-control" id="phone" />
+      </div>
+      <p></p>
+      <div class="col-12 col-sm-8 col-lg-6">
+        <label for="email" class="form-label">Email address</label>
+        <input
+          name="email"
+          type="email"
+          class="form-control"
+          id="email"
+          required
+        />
+      </div>
+      <p></p>
+      <div class="col-12 col-sm-8 col-lg-6">
+        <label for="description" class="form-label">Message</label>
+        <textarea
+          name="message"
+          class="form-control"
+          style="height: 150px"
+          required
+        ></textarea>
+      </div>
+      <p></p>
+      <input class="btn btn-lg btn-primary" type="submit" value="Submit" />
+      <p></p>
+      <p><i class="fas fa-phone"></i> +201234567890</p>
+      <p><i class="fas fa-envelope"></i> lareserve@gmail.com</p>
+    </form>
+
+    <footer id="footer" class="text-muted footer">
+      <div class="footer-container text-center">
+        <div class="footer-social-text">Social links</div>
+        <p></p>
+        <a href="https://www.facebook.com/" class="footer-link"
+          ><i class="fab fa-facebook-f"></i
+        ></a>
+        <a href="https://www.instagram.com/" class="footer-link"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <hr style="color: white" />
+        <a href="index.html" class="footer-link">English</a>
+        <a href="ar.html" class="footer-link">عربى</a>
+        <p></p>
+        <p class="footer-cr">©2023 La Réserve</p>
+      </div>
+    </footer>
+
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
