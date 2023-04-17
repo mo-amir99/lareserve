@@ -1,27 +1,14 @@
 #myForm{box-sizing: border-box;}
 
-/* Button used to open the contact form - fixed at the bottom of the page */
-.open-button {
-  background-color: #555;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  opacity: 0.8;
-  position: fixed;
-  bottom: 23px;
-  right: 28px;
-  width: 280px;
-}
-
 /* The popup form - hidden by default */
 .form-popup {
   display: none;
   position: fixed;
-  top: 50%;
-left: 50%;
-margin-top: -100px; /* Negative half of height. */
-margin-left: -200px; /* Negative half of width. */
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+/* margin-top: 150px; */
+  margin-right: auto;
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -31,6 +18,7 @@ margin-left: -200px; /* Negative half of width. */
 
 /* Add styles to the form container */
 .form-container {
+  min-width: 300px;
   max-width: 400px;
   padding: 10px;
   background-color: white;

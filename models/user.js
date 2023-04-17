@@ -15,7 +15,9 @@ var UserSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: true,
+  },
+  organizations: {
+    type: Array,
   },
 });
 

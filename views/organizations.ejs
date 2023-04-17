@@ -9,44 +9,28 @@
         <tr>
           <th scope="col">Organization</th>
           <th scope="col">Chambers</th>
-          <th scope="col">Participants</th>
           <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <th scope="row">My Organization 1</th>
-          <td>5</td>
-          <td>40</td>
-          <td>
-            <button class="btn btn-primary"><i class="fas fa-solid fa-wrench"></i></button>
-            <button class="btn btn-primary"><i class="fas fa-solid fa-trash"></i></button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">My Organization 2</th>
-          <td>7</td>
-          <td>140</td>
-          <td>
-            <button class="btn btn-primary"><i class="fas fa-solid fa-wrench"></i></button>
-            <button class="btn btn-primary"><i class="fas fa-solid fa-trash"></i></button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">My Organization 3</th>
-          <td>15</td>
-          <td>200</td>
-          <td>
-            <button class="btn btn-primary"><i class="fas fa-solid fa-wrench"></i></button>
-            <button class="btn btn-primary"><i class="fas fa-solid fa-trash"></i></button>
-          </td>
-        </tr> 
+          <% for(var i=0; i<organizations.length; i++) {%>
+            <tr>
+              <th scope="row"><%= organizations[i].name %></th>
+              <td><%= organizations[i].chambers.length %></td>
+              <td>
+                <button class="btn btn-primary"><i class="fas fa-solid fa-wrench"></i></button>
+                <button class="btn btn-primary" onclick="openForm('delete','<%= organizations[i]._id%>')"><i class="fas fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+         <% } %>
         </tbody>
       </table>
-
+      <% if (organizations.length < 1) { %>
+        <h4 style="color: grey;">Start by adding an organization below!</h4>
+      <% } %>
       <h1 class="h2 mt-5">Add a new Organization</h1>
       <hr>
-      <form id="AddOrganization" action="#" method="POST">
+      <form id="AddOrganization" action="/new-organization" method="POST">
         <div class="row">
           <div class="col-6 col-sm-4 col-lg-3">
             <label for="name" class="form-label">Organization Name</label>
@@ -62,7 +46,7 @@
             <label for="no" class="form-label">Chambers No.</label>
             <input
               name="no"
-              type="text"
+              type="number"
               class="form-control"
               id="no"
               required
@@ -70,7 +54,7 @@
           </div>
           <div class="col-2 col-sm-2 col-lg-2">
 
-            <button class="btn btn-primary btmarg">Add</button>
+            <button class="btn btn-primary btmarg"><i class="fas fa-solid fa-plus"></i></button>
           </div>
         </div>
       </form>

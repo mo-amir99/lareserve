@@ -12,6 +12,8 @@ const session = require("express-session");
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const User = require("./models/user");
+const Organization = require("./models/organization");
+const Chamber = require("./models/chamber");
 const LocalStrategy = require("passport-local").Strategy;
 const registerService = require("./register-service");
 const MongoStore = require("connect-mongo");
@@ -27,7 +29,11 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.DATABASE_URL }),
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    store: MongoStore.create({
+      mongoUrl: process.env.DATABASE_URL,
+      clear_interval: 3600,
+    }),
   })
 );
 app.set("view engine", "ejs");
@@ -71,7 +77,7 @@ passport.deserializeUser((userId, done) => {
 ////// ROUTES
 //////
 
-app.get("/", checkAuthenticated, (req, res) => res.render("index"));
+app.get("/", (req, res) => res.render("index"));
 
 app.get("/login", checkNotAuthenticated, (req, res) => res.render("login"));
 
@@ -100,9 +106,53 @@ app.delete("/logout", (req, res) => {
   });
 });
 
-app.get("/update-password", checkAuthenticated, (req, res) =>
-  res.render("update-password")
-);
+app.post("/delete-organization", async (req, res) => {
+  const organization = await Organization.findOne({ _id: req.body.orgId });
+  if (organization) {
+    for (let i = 0; i < organization.chambers.length; i++) {
+      await Chamber.deleteOne({ _id: organization.chambers[i] });
+    }
+    await User.updateOne(
+      { username: req.user.username },
+      { $pull: { organizations: req.body.orgId } }
+    );
+    await organization.deleteOne();
+    return res.redirect("/organizations");
+  } else {
+    return res.status(500).json("Internal Server Error");
+  }
+});
+
+app.post("/new-organization", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.user.username });
+    if (user) {
+      // const ObjectID = require("mongodb").ObjectID;
+      organization = new Organization({
+        // _id: new ObjectID(),
+        owner: user._id,
+        name: req.body.name,
+        chambers: [],
+      });
+      for (let i = 0; i < req.body.no; i++) {
+        const chamber = new Chamber({
+          owner: organization._id,
+          name: `Chamber-${i + 1}`,
+          members: [],
+        });
+        await chamber.save();
+        organization.chambers.push(chamber._id);
+      }
+      await organization.save();
+      user.organizations.push(organization._id);
+      await user.save();
+      return res.redirect("/organizations");
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json("Internal Server Error");
+  }
+});
 
 app.post("/update-password", async (req, res) => {
   try {
@@ -163,8 +213,22 @@ function checkNotAuthenticated(req, res, next) {
   next();
 }
 
-app.get("/organizations", checkAuthenticated, function (req, res) {
-  res.render("organizations", { layout: "layouts/dashboard", user: req.user });
+app.get("/organizations", checkAuthenticated, async function (req, res) {
+  const organizations = await Organization.find({
+    _id: { $in: req.user.organizations },
+  });
+  if (organizations) {
+    res.render("organizations", {
+      layout: "layouts/dashboard",
+      user: req.user,
+      organizations: organizations,
+    });
+  } else {
+    res.render("organizations", {
+      layout: "layouts/dashboard",
+      user: req.user,
+    });
+  }
 });
 
 app.get("/management", checkAuthenticated, function (req, res) {

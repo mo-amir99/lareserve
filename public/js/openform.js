@@ -1,4 +1,4 @@
-function openForm(type) {
+function openForm(type, id) {
   switch (type) {
     case "name":
       document.updateForm.action = "update-name";
@@ -15,8 +15,22 @@ function openForm(type) {
       document.getElementById("formUserInput").setAttribute("name", "password");
       document.getElementById("form-title").innerHTML = "Update Your Password";
       break;
+    case "delete":
+      document.updateForm.action = "delete-organization";
+      document.getElementById("orgId").value = id;
+      document.getElementById("formUserInput").hidden = true;
+      document.getElementById("form-title").innerHTML =
+        "Are you sure you want to delete this organization?";
+      document.getElementById("actionButton").innerHTML = "Delete";
+      break;
+    case "sub":
+      document.getElementById("form-title").innerHTML =
+        "Please contact support in order to change your subscription plan";
+      document.getElementById("formUserInput").hidden = true;
+      document.getElementById("actionButton").hidden = true;
+      document.getElementById("closeButton").innerHTML = "Ok";
+      break;
     default:
-    // code block
   }
   document.getElementById("myForm").style.display = "block";
 }
