@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>La Réserve</title>
 
-    <link rel="icon" href="logo.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/dashboard.css" />
-    <link rel="stylesheet" href="css/form.css" />
+    <link rel="icon" href="/logo.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+    <link rel="stylesheet" href="/css/form.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat&family=Ubuntu:wght@700&display=swap"
       rel="stylesheet"
@@ -25,7 +25,7 @@
     >
       <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="/"
         ><span class="logo"
-        ><img class="logo-img" src="logo.ico" alt="" /></span>La Réserve</a
+        ><img class="logo-img" src="/logo.ico" alt="" /></span>La Réserve</a
       >
       <button
         class="navbar-toggler position-absolute d-md-none collapsed mt-1"
@@ -67,8 +67,8 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/notifications">
-              Notifications
+            <a class="nav-link" href="/schedule">
+              Schedule
             </a>
           </li>
           <li class="nav-item">
@@ -118,14 +118,18 @@
         <form id="updateForm" name="updateForm" action="/update-settings" method="POST" class="form-container">
           <h5 id="form-title">Update your settings</h5>
           <input type="text" name="userInput" id="formUserInput">
+          <h5 id="input2title" hidden>Update your settings</h5>
+          <input id="input2" type="number" name="input2" hidden>
           <input type="text" name="orgId" id="orgId" hidden>
+          <input type="text" name="chamberId" id="chamberId" hidden>
+          <input type="text" name="selectedDate" id="selectedDate" hidden>
           <button id="actionButton" type="submit" class="btn btn-primary">Update</button>
           <button id="closeButton" type="button" class="btn btn-primary" onclick="closeForm()">Cancel</button>
         </form>
       </div>
     </div>
     
-    <script src="js/openform.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/js/openform.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 </body>
 </html>

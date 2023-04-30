@@ -18,7 +18,7 @@
               <th scope="row"><%= organizations[i].name %></th>
               <td><%= organizations[i].chambers.length %></td>
               <td>
-                <button class="btn btn-primary"><i class="fas fa-solid fa-wrench"></i></button>
+                <button class="btn btn-primary" onclick="window.location='management/#<%= organizations[i].name %>'"><i class="fas fa-solid fa-wrench"></i></button>
                 <button class="btn btn-primary" onclick="openForm('delete','<%= organizations[i]._id%>')"><i class="fas fa-solid fa-trash"></i></button>
               </td>
             </tr>

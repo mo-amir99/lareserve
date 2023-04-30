@@ -1,10 +1,6 @@
 var mongoose = require("mongoose");
 
 var ChamberSchema = new mongoose.Schema({
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Organization",
-  },
   name: {
     type: String,
     required: true,
@@ -14,7 +10,7 @@ var ChamberSchema = new mongoose.Schema({
     required: false,
   },
   members: {
-    type: Array,
+    type: Map,
   },
 });
 

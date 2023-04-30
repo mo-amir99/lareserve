@@ -1,22 +1,22 @@
-function openForm(type, id) {
+function openForm(type, id, cId, date) {
   switch (type) {
     case "name":
-      document.updateForm.action = "update-name";
+      document.updateForm.action = "/update-name";
       document.getElementById("formUserInput").setAttribute("name", "name");
       document.getElementById("form-title").innerHTML = "Update Your Username";
       break;
     case "phone":
-      document.updateForm.action = "update-phone";
+      document.updateForm.action = "/update-phone";
       document.getElementById("formUserInput").setAttribute("name", "phone");
       document.getElementById("form-title").innerHTML = "Update Your Phone";
       break;
     case "password":
-      document.updateForm.action = "update-password";
+      document.updateForm.action = "/update-password";
       document.getElementById("formUserInput").setAttribute("name", "password");
       document.getElementById("form-title").innerHTML = "Update Your Password";
       break;
     case "delete":
-      document.updateForm.action = "delete-organization";
+      document.updateForm.action = "/delete-organization";
       document.getElementById("orgId").value = id;
       document.getElementById("formUserInput").hidden = true;
       document.getElementById("form-title").innerHTML =
@@ -30,6 +30,39 @@ function openForm(type, id) {
       document.getElementById("actionButton").hidden = true;
       document.getElementById("closeButton").innerHTML = "Ok";
       break;
+    case "deleteChamber":
+      document.updateForm.action = "/delete-chamber";
+      document.getElementById("chamberId").value = cId;
+      document.getElementById("orgId").value = id;
+      document.getElementById("input2").hidden = true;
+      document.getElementById("input2title").hidden = true;
+      document.getElementById("formUserInput").hidden = true;
+      document.getElementById("form-title").innerHTML =
+        "Are you sure you want to delete this chamber?";
+      document.getElementById("actionButton").innerHTML = "Delete";
+      break;
+    case "updateChamber":
+      document.updateForm.action = "/update-chamber";
+      document.getElementById("chamberId").value = cId;
+      document.getElementById("orgId").value = id;
+      document.getElementById("input2").hidden = false;
+      document.getElementById("input2title").hidden = false;
+      document.getElementById("formUserInput").hidden = false;
+      document.getElementById("input2title").innerHTML = "Update capacity";
+      document.getElementById("formUserInput").setAttribute("name", "name");
+      document.getElementById("form-title").innerHTML = "Update name";
+      document.getElementById("actionButton").innerHTML = "Update";
+      break;
+    case "updateChamberMembers":
+      document.updateForm.action = "/update-chamber-members";
+      document.getElementById("chamberId").value = cId;
+      document.getElementById("orgId").value = id;
+      document.getElementById("selectedDate").value = date;
+      document.getElementById("formUserInput").setAttribute("name", "members");
+      document.getElementById("form-title").innerHTML =
+        "Emails list separated by commas, Example: john@gmail.com, ahmed@yahoo.com";
+      document.getElementById("actionButton").innerHTML = "Update";
+      break;
     default:
   }
   document.getElementById("myForm").style.display = "block";
@@ -37,4 +70,6 @@ function openForm(type, id) {
 
 function closeForm() {
   document.getElementById("myForm").style.display = "none";
+  document.getElementById("formUserInput").value = "";
+  document.getElementById("input2").value = "";
 }

@@ -1,3 +1,66 @@
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <h1>Work in progress ...</h1>
-</main>
+    <div
+      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+    >
+      <h1 class="h2 mt-4">Organizations Management</h1>
+    </div>
+    <% for(var i=0; i<organizations.length; i++) {%>
+      <h4 id="<%= organizations[i].name %>"><%= organizations[i].name %></h4>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+          <th scope="col">Chamber name</th>
+          <th scope="col">Capacity</th>
+          <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% for(var y=0; y<organizations[i].chambers.length; y++) {%>
+            <tr>
+              <th scope="row"><%= organizations[i].chambers[y].name %></th>
+              <td><%= organizations[i].chambers[y].maxCapacity %></td>
+              <td>
+                <button class="btn btn-primary" onclick="openForm('updateChamber','<%= organizations[i]._id%>','<%= organizations[i].chambers[y]._id%>')"><i class="fas fa-solid fa-wrench"></i></button>
+                <button class="btn btn-primary" onclick="openForm('deleteChamber','<%= organizations[i]._id%>','<%= organizations[i].chambers[y]._id%>')"><i class="fas fa-solid fa-trash"></i></button>
+              </td>
+            </tr>
+         <% } %>
+        </tbody>
+      </table>
+      <h6 class="mt-2">Add a new chamber</h6>
+      <form id="AddChamber" action="/add-chamber" method="POST">
+        <input type="text" name="organizationId" id="organizationId" hidden value="<%= organizations[i]._id%>">
+        <div class="row">
+          <div class="col-6 col-sm-4 col-lg-3">
+            <label for="name" class="form-label">Chamber Name</label>
+            <input
+              name="name"
+              type="text"
+              class="form-control"
+              id="name"
+              required
+            />
+          </div>
+          <div class="col-4 col-sm-4 col-lg-3">
+            <label for="capacity" class="form-label">Capacity</label>
+            <input
+              name="capacity"
+              type="number"
+              class="form-control"
+              id="capacity"
+              required
+            />
+          </div>
+          <div class="col-2 col-sm-2 col-lg-2">
+
+            <button class="btn btn-primary btmarg"><i class="fas fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+        <br>
+      </form>
+      <hr>
+      <% } %>
+      <% if (organizations.length < 1) { %>
+        <h4 style="color: grey;">You don't have organizations yet!</h4>
+      <% } %>
+  </main>

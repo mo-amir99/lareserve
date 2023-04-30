@@ -77,7 +77,7 @@ passport.deserializeUser((userId, done) => {
 ////// ROUTES
 //////
 
-app.get("/", (req, res) => res.render("index"));
+app.get("/", checkNotAuthenticated, (req, res) => res.render("index"));
 
 app.get("/login", checkNotAuthenticated, (req, res) => res.render("login"));
 
@@ -109,15 +109,80 @@ app.delete("/logout", (req, res) => {
 app.post("/delete-organization", async (req, res) => {
   const organization = await Organization.findOne({ _id: req.body.orgId });
   if (organization) {
-    for (let i = 0; i < organization.chambers.length; i++) {
-      await Chamber.deleteOne({ _id: organization.chambers[i] });
+    // for (let i = 0; i < organization.chambers.length; i++) {
+    //   await Chamber.deleteOne({ _id: organization.chambers[i] });
+    // }
+    const user = await User.findOne({ username: req.user.username });
+    if (user) {
+      await user.organizations.pull(organization._id);
+      await user.save();
+    } else {
+      return res.status(500).json("Internal Server Error");
     }
-    await User.updateOne(
-      { username: req.user.username },
-      { $pull: { organizations: req.body.orgId } }
-    );
     await organization.deleteOne();
     return res.redirect("/organizations");
+  } else {
+    return res.status(500).json("Internal Server Error");
+  }
+});
+
+app.post("/delete-chamber", async (req, res) => {
+  const organization = await Organization.findOne({ _id: req.body.orgId });
+  if (organization) {
+    const chamber = organization.chambers.find(
+      (chamber) => chamber._id == req.body.chamberId
+    );
+    if (chamber) {
+      organization.chambers.pull(chamber);
+      organization.save();
+    } else {
+      return res.status(500).json("Internal Server Error");
+    }
+    return res.redirect("/management");
+  } else {
+    return res.status(500).json("Internal Server Error");
+  }
+});
+
+app.post("/add-chamber", async (req, res) => {
+  const organization = await Organization.findOne({
+    _id: req.body.organizationId,
+  });
+  if (organization) {
+    const chamber = new Chamber({
+      name: req.body.name,
+      members: [],
+      maxCapacity: req.body.capacity,
+    });
+    organization.chambers.push(chamber);
+    await organization.save();
+    return res.redirect("/management");
+  } else {
+    return res.status(500).json("Internal Server Error");
+  }
+});
+
+app.post("/update-chamber-members", async (req, res) => {
+  const organization = await Organization.findOne({
+    _id: req.body.orgId,
+  });
+  if (organization) {
+    const chamber = organization.chambers.find(
+      (chamber) => chamber._id == req.body.chamberId
+    );
+    if (chamber) {
+      members = req.body.members.split(",").map(function (item) {
+        return item.trim();
+      });
+      chamber.members[req.body.selectedDate] = members;
+      // chamber.members.push({ date: date, members: members });
+      organization.chambers.pull(chamber);
+      organization.chambers.push(chamber);
+      organization.save();
+    } else {
+      return res.status(500).json("Internal Server Error");
+    }
+    return res.redirect("/schedule");
   } else {
     return res.status(500).json("Internal Server Error");
   }
@@ -127,21 +192,18 @@ app.post("/new-organization", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.user.username });
     if (user) {
-      // const ObjectID = require("mongodb").ObjectID;
       organization = new Organization({
-        // _id: new ObjectID(),
         owner: user._id,
         name: req.body.name,
         chambers: [],
       });
       for (let i = 0; i < req.body.no; i++) {
         const chamber = new Chamber({
-          owner: organization._id,
           name: `Chamber-${i + 1}`,
-          members: [],
+          members: {},
+          maxCapacity: 10,
         });
-        await chamber.save();
-        organization.chambers.push(chamber._id);
+        organization.chambers.push(chamber);
       }
       await organization.save();
       user.organizations.push(organization._id);
@@ -164,6 +226,34 @@ app.post("/update-password", async (req, res) => {
       );
       user.save();
       return res.redirect("/profile");
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json("Internal Server Error");
+  }
+});
+
+app.post("/update-chamber", async (req, res) => {
+  try {
+    const organization = await Organization.findOne({ _id: req.body.orgId });
+    if (organization) {
+      const chamber = organization.chambers.find(
+        (chamber) => chamber._id == req.body.chamberId
+      );
+      if (chamber) {
+        if (req.body.name) {
+          chamber.name = req.body.name;
+        }
+        if (req.body.input2) {
+          chamber.maxCapacity = req.body.input2;
+        }
+        organization.chambers.pull(chamber);
+        organization.chambers.push(chamber);
+        organization.save();
+      } else {
+        return res.status(500).json("Internal Server Error");
+      }
+      return res.redirect("/management");
     }
   } catch (err) {
     console.log(err);
@@ -231,12 +321,42 @@ app.get("/organizations", checkAuthenticated, async function (req, res) {
   }
 });
 
-app.get("/management", checkAuthenticated, function (req, res) {
-  res.render("management", { layout: "layouts/dashboard", user: req.user });
+app.get("/management", checkAuthenticated, async function (req, res) {
+  const organizations = await Organization.find({
+    _id: { $in: req.user.organizations },
+  });
+  if (organizations) {
+    res.render("management", {
+      layout: "layouts/dashboard",
+      user: req.user,
+      organizations: organizations,
+    });
+  } else {
+    res.render("management", {
+      layout: "layouts/dashboard",
+      user: req.user,
+    });
+  }
 });
 
-app.get("/notifications", checkAuthenticated, function (req, res) {
-  res.render("notifications", { layout: "layouts/dashboard", user: req.user });
+app.get("/schedule", checkAuthenticated, async function (req, res) {
+  const organizations = await Organization.find({
+    _id: { $in: req.user.organizations },
+  });
+  if (organizations) {
+    res.render("schedule", {
+      layout: "layouts/dashboard",
+      user: req.user,
+      organizations: organizations,
+      date: req.query.date,
+    });
+  } else {
+    res.render("schedule", {
+      layout: "layouts/dashboard",
+      user: req.user,
+      date: req.query.date,
+    });
+  }
 });
 
 app.get("/reports", checkAuthenticated, function (req, res) {
