@@ -1,4 +1,4 @@
-function openForm(type, id, cId, date) {
+function openForm(type, id, cId, date, members) {
   switch (type) {
     case "name":
       document.updateForm.action = "/update-name";
@@ -62,6 +62,17 @@ function openForm(type, id, cId, date) {
       document.getElementById("form-title").innerHTML =
         "Emails list separated by commas, Example: john@gmail.com, ahmed@yahoo.com";
       document.getElementById("actionButton").innerHTML = "Update";
+      break;
+    case "sendEmail":
+      document.updateForm.action = "/send-email";
+      document.getElementById("chamberId").value = cId;
+      document.getElementById("orgId").value = id;
+      document.getElementById("selectedDate").value = date;
+      document.getElementById("members").value = members;
+      document.getElementById("formUserInput").hidden = true;
+      document.getElementById("form-title").innerHTML =
+        "Send Email Notification?";
+      document.getElementById("actionButton").innerHTML = "Send";
       break;
     default:
   }

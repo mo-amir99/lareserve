@@ -18,6 +18,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const registerService = require("./register-service");
 const MongoStore = require("connect-mongo");
 const expressLayouts = require("express-ejs-layouts");
+const nodemailer = require("nodemailer");
 
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;
@@ -76,6 +77,41 @@ passport.deserializeUser((userId, done) => {
 //////
 ////// ROUTES
 //////
+
+app.post("/send-email", (req, res) => {
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "lareserveproject@gmail.com",
+      pass: "cfzmkqfdjntfpuyw",
+    },
+  });
+  var mailOptions = {
+    from: "lareserveproject@gmail.com",
+    to: req.body.members,
+    subject: "La Reserve Reservation",
+    text:
+      "This email is to inform you that you have been added to a reservation by " +
+      req.body.orgId +
+      " on " +
+      req.body.selectedDate +
+      " at " +
+      req.body.chamberId,
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      return res.status(500).json(error);
+    } else {
+      return res.send(
+        "<h1>Email sent successfully</h1> <a href='/report'>Go Back</a>"
+      );
+    }
+  });
+});
 
 app.get("/", checkNotAuthenticated, (req, res) => res.render("index"));
 
@@ -359,8 +395,24 @@ app.get("/schedule", checkAuthenticated, async function (req, res) {
   }
 });
 
-app.get("/reports", checkAuthenticated, function (req, res) {
-  res.render("reports", { layout: "layouts/dashboard", user: req.user });
+app.get("/report", checkAuthenticated, async function (req, res) {
+  const organizations = await Organization.find({
+    _id: { $in: req.user.organizations },
+  });
+  if (organizations) {
+    res.render("report", {
+      layout: "layouts/dashboard",
+      user: req.user,
+      organizations: organizations,
+      date: req.query.date,
+    });
+  } else {
+    res.render("report", {
+      layout: "layouts/dashboard",
+      user: req.user,
+      date: req.query.date,
+    });
+  }
 });
 
 app.get("/profile", checkAuthenticated, function (req, res) {

@@ -1,0 +1,74 @@
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+  >
+    <h1 class="h2 mt-4">Reservations Report</h1>
+  </div>
+  <label for="date">Show report for </label>
+  <% if (date) {%>
+      <input type="date" id="date" name="date" value="<%= date %>">
+      <br>
+      <br>
+<% for(var i=0; i<organizations.length; i++) {%>
+  <h4 id="<%= organizations[i].name %>"><%= organizations[i].name %></h4>
+<!-- <table class="table table-hover"> -->
+    <!-- <thead> -->
+    <!-- <tr> -->
+      <!-- <th scope="col">Chamber name</th> -->
+      <!-- <th scope="col">Members</th> -->
+      <!-- <th scope="col">Actions</th> -->
+    <!-- </tr> -->
+    <!-- </thead> -->
+    <!-- <tbody> -->
+      <% for(var y=0; y<organizations[i].chambers.length; y++) {%>
+        <% if (organizations[i].chambers[y].members[date] != undefined) {%>
+        <!-- <tr> -->
+          <th scope="row"></th>
+            <% members = []; for (const [key, value] of Object.entries(organizations[i].chambers[y].members)) { %>
+             <% key == date ? members.push(...value) : ''} %>
+             
+             <table class="table table-hover">
+              <thead>
+              <tr>
+                <th style="width: 100%;" scope="col"><%= organizations[i].chambers[y].name %>
+                  <% if ((members.length < organizations[i].chambers[y].maxCapacity) && (members.length != 0)) {%>
+                  <span style="font-weight: 600; color: green;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </span>
+                  <% } else if ((members.length > organizations[i].chambers[y].maxCapacity) && (members.length != 0)) { %>
+                    <span style="font-weight: 600; color: red;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </span>
+                  <% } else if ((members.length ==  organizations[i].chambers[y].maxCapacity) && (members.length != 0)) { %>
+                    <span style="font-weight: 600; color: blue;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </span>
+                  <% } else if (members.length ==  0) { %>
+                    <span style="font-weight: 600; color: black;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </span>
+                  <% } %>
+                  <span>
+                </th>
+                  <th>
+                    <button class="btn btn-primary" onclick="openForm('sendEmail', '<%= organizations[i].name %>','<%= organizations[i].chambers[y].name %>', '<%= date %>', '<%= members %>')"><i class="fas fa-solid fa-bell"></i></button>
+                  </th>
+              </tr>
+              </thead>
+              <tbody>
+                <%  members.forEach(member => { %>
+                  <tr>
+                    <td><%= member %></td>
+                    <td></td>
+                  </tr>
+               <%  }); %>
+                </tbody>
+                </table>
+            
+        </tr>
+     <% } %>
+      <% } %>
+    </tbody>
+  </table>
+  <% } %>
+  <% } %>
+  <% if (!date) {%>
+      <input type="date" id="date" name="date">
+  <% } %>
+  <% if (organizations.length < 1) { %>
+    <h4 style="color: grey;">You don't have organizations yet!</h4>
+  <% } %>
+</main>
+<script src="/js/date.js"></script>
