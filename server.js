@@ -207,9 +207,14 @@ app.post("/update-chamber-members", async (req, res) => {
       (chamber) => chamber._id == req.body.chamberId
     );
     if (chamber) {
-      members = req.body.members.split(",").map(function (item) {
-        return item.trim();
-      });
+      members = new Array();
+      members = req.body.members
+        .toString()
+        .split(",")
+        .map(function (item) {
+          return item.trim();
+        });
+      members.pop();
       chamber.members[req.body.selectedDate] = members;
       // chamber.members.push({ date: date, members: members });
       organization.chambers.pull(chamber);

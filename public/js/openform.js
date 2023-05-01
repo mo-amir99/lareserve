@@ -58,8 +58,8 @@ function openForm(type, id, cId, date, members) {
       document.getElementById("chamberId").value = cId;
       document.getElementById("orgId").value = id;
       document.getElementById("selectedDate").value = date;
-      document.getElementById("formUserInput").setAttribute("name", "members");
       document.getElementById("formUserInput").value = members.toString();
+      document.getElementById("formUserInput").setAttribute("name", "members");
       document.getElementById("form-title").innerHTML =
         "Emails list separated by commas, Example: john@gmail.com, ahmed@yahoo.com";
       document.getElementById("actionButton").innerHTML = "Update";
