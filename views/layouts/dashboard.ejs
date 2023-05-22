@@ -118,12 +118,18 @@
         <form id="updateForm" name="updateForm" action="/update-settings" method="POST" class="form-container">
           <h5 id="form-title">Update your settings</h5>
           <input type="text" name="userInput" id="formUserInput">
+          <label id="fromtxt" for="from" hidden>From </label>
+          <input type="time" id="from" name="from" hidden>
+          <label id="totxt" for="to" hidden>To </label>
+          <input type="time" id="to" name="to" hidden>
           <h5 id="input2title" hidden>Update your settings</h5>
           <input id="input2" type="number" name="input2" hidden>
           <input type="text" name="orgId" id="orgId" hidden>
           <input type="text" name="chamberId" id="chamberId" hidden>
           <input type="text" name="selectedDate" id="selectedDate" hidden>
           <input type="text" name="members" id="members" hidden>
+          <br>
+          <br>
           <button id="actionButton" type="submit" class="btn btn-primary">Update</button>
           <button id="closeButton" type="button" class="btn btn-primary" onclick="closeForm()">Cancel</button>
         </form>

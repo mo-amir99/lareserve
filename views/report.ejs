@@ -11,58 +11,39 @@
       <br>
 <% for(var i=0; i<organizations.length; i++) {%>
   <h4 id="<%= organizations[i].name %>"><%= organizations[i].name %></h4>
-<!-- <table class="table table-hover"> -->
-    <!-- <thead> -->
-    <!-- <tr> -->
-      <!-- <th scope="col">Chamber name</th> -->
-      <!-- <th scope="col">Members</th> -->
-      <!-- <th scope="col">Actions</th> -->
-    <!-- </tr> -->
-    <!-- </thead> -->
-    <!-- <tbody> -->
       <% for(var y=0; y<organizations[i].chambers.length; y++) {%>
-        <% if (organizations[i].chambers[y].members[date] != undefined) {%>
-        <!-- <tr> -->
-          <th scope="row"></th>
-            <% members = []; for (const [key, value] of Object.entries(organizations[i].chambers[y].members)) { %>
-             <% key == date ? members.push(...value) : ''} %>
-             
-             <table class="table table-hover">
-              <thead>
+        <% if (organizations[i].chambers[y].reservations != undefined) {%>
+          <h5 id="<%= organizations[i].chambers[y].name %>"><%= organizations[i].chambers[y].name %></h5>
+              <% for(var z=0; z<organizations[i].chambers[y].reservations.length; z++) {%>
+                <% if(organizations[i].chambers[y].reservations[z].date == date) {%>
+                  <div class="table-responsive"></div>
+          <table class="table table-hover">
+            <thead>
               <tr>
-                <th style="width: 100%;" scope="col"><%= organizations[i].chambers[y].name %>
-                  <% if ((members.length < organizations[i].chambers[y].maxCapacity) && (members.length != 0)) {%>
-                  <span style="font-weight: 600; color: green;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </span>
-                  <% } else if ((members.length > organizations[i].chambers[y].maxCapacity) && (members.length != 0)) { %>
-                    <span style="font-weight: 600; color: red;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </span>
-                  <% } else if ((members.length ==  organizations[i].chambers[y].maxCapacity) && (members.length != 0)) { %>
-                    <span style="font-weight: 600; color: blue;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </span>
-                  <% } else if (members.length ==  0) { %>
-                    <span style="font-weight: 600; color: black;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </span>
-                  <% } %>
-                  <span>
-                </th>
-                  <th>
-                    <button class="btn btn-primary" onclick="openForm('sendEmail', '<%= organizations[i].name %>','<%= organizations[i].chambers[y].name %>', '<%= date %>', '<%= members %>')"><i class="fas fa-solid fa-bell"></i></button>
-                  </th>
+                <th>Reservation Time</th>
+                <th>Reservation User</th>
+                <th >Action</th>
               </tr>
-              </thead>
-              <tbody>
-                <%  members.forEach(member => { %>
-                  <tr>
-                    <td><%= member %></td>
-                    <td></td>
+            </thead>
+            <tbody>
+              <% for(var x=0; x<organizations[i].chambers[y].reservations[z].members.length; x++) { %>
+                <tr>
+                  <td><%= organizations[i].chambers[y].reservations[z].time %></td>
+                  <td style="min-width: 200px;">
+                      <%= organizations[i].chambers[y].reservations[z].members[x]%>
+                  </td>
+                  <td><button class="btn btn-primary" onclick="openForm('sendEmail', '<%= organizations[i].name %>','<%= organizations[i].chambers[y].name %>', '<%= date %>', '<%= organizations[i].chambers[y].reservations[z].members[x] %>')"><i class="fas fa-solid fa-trash"></i></button></td>
                   </tr>
-               <%  }); %>
-                </tbody>
-                </table>
-            
-        </tr>
-     <% } %>
+                  <% } %>
+                  <% } %>
+              <% } %>
+            </tbody>
+          </thead>
+        </table>
+      </div>
+        <% } %>
       <% } %>
-    </tbody>
-  </table>
-  <% } %>
+    <% } %>
   <% } %>
   <% if (!date) {%>
       <input type="date" id="date" name="date">

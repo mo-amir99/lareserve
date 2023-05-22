@@ -14,6 +14,7 @@ const mongoose = require("mongoose");
 const User = require("./models/user");
 const Organization = require("./models/organization");
 const Chamber = require("./models/chamber");
+const Reservation = require("./models/reservation");
 const LocalStrategy = require("passport-local").Strategy;
 const registerService = require("./register-service");
 const MongoStore = require("connect-mongo");
@@ -187,7 +188,7 @@ app.post("/add-chamber", async (req, res) => {
   if (organization) {
     const chamber = new Chamber({
       name: req.body.name,
-      members: [],
+      reservation: [],
       maxCapacity: req.body.capacity,
     });
     organization.chambers.push(chamber);
@@ -207,23 +208,57 @@ app.post("/update-chamber-members", async (req, res) => {
       (chamber) => chamber._id == req.body.chamberId
     );
     if (chamber) {
+      const from = req.body.from;
+      const to = req.body.to;
       members = new Array();
       members = req.body.members
         .toString()
         .split(",")
         .map(function (item) {
-          return item.trim();
+          if (item.includes("@")) return item.trim();
+          else return null;
         });
-      members.pop();
-      chamber.members[req.body.selectedDate] = members;
-      // chamber.members.push({ date: date, members: members });
+      newMembers = new Array();
+      for (let i = 0; i < members.length; i++) {
+        if (members[i] != null) {
+          newMembers.push(members[i]);
+        }
+      }
+      const fromTo = from + " to " + to;
+      selectedDate = req.body.selectedDate;
+      //  const reservation = chamber.reservations.findOne({date: selectedDate})
+      // chamber.reservations.selectedDate = {};
+      var reservation = null;
+      if (chamber.reservations == undefined) chamber.reservations = [];
+      if (from && to) {
+        const reserv = chamber.reservations.findIndex(
+          (res) => res.time == fromTo && res.date == selectedDate
+        );
+        if (reserv) chamber.reservations.splice(reserv, 1);
+        reservation = new Reservation({
+          date: selectedDate,
+          members: newMembers,
+          time: fromTo,
+        });
+      } else {
+        const reserv = chamber.reservations.findIndex(
+          (res) => res.date == selectedDate && res.time == "Full Day"
+        );
+        if (reserv) chamber.reservations.splice(reserv, 1);
+        reservation = new Reservation({
+          date: selectedDate,
+          members: newMembers,
+          time: "Full Day",
+        });
+      }
+      chamber.reservations.push(reservation);
       organization.chambers.pull(chamber);
       organization.chambers.push(chamber);
       organization.save();
     } else {
       return res.status(500).json("Internal Server Error");
     }
-    return res.redirect("/schedule");
+    return res.redirect("/schedule/");
   } else {
     return res.status(500).json("Internal Server Error");
   }

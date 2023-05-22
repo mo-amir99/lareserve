@@ -36,7 +36,7 @@
                 <td style="font-weight: 600; color: black;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </td>
               <% } %>
             <td>
-              <button class="btn btn-primary" onclick="openForm('updateChamberMembers','<%= organizations[i]._id%>','<%= organizations[i].chambers[y]._id%>', '<%= date %>', '<%= members %>' )"><i class="fas fa-solid fa-wrench"></i></button>
+            <button class="btn btn-primary" onclick="openForm('updateChamberMembers','<%= organizations[i]._id%>','<%= organizations[i].chambers[y]._id%>', '<%= date %>', '<%= members %>' )"><i class="fas fa-solid fa-wrench"></i></button>
             </td>
           </tr>
        <% } %>

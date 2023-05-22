@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var members = require("./reservation");
 
 var ChamberSchema = new mongoose.Schema({
   name: {
@@ -9,8 +10,9 @@ var ChamberSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
-  members: {
-    type: Map,
+  reservations: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Reservation",
   },
 });
 
