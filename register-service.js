@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
     });
     await user.save();
-    return res.redirect("/login");
+    return res.render("login");
   } catch (err) {
     console.log(err);
     return res.status(500).json("Internal Server Error");

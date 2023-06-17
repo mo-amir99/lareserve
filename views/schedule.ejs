@@ -15,7 +15,6 @@
       <thead>
       <tr>
         <th scope="col">Chamber name</th>
-        <th scope="col">Members</th>
         <th scope="col">Actions</th>
       </tr>
       </thead>
@@ -26,15 +25,6 @@
             
               <% members = []; for (const [key, value] of Object.entries(organizations[i].chambers[y].members)) { %>
                <% key == date ? members.push(...value) : ''} %>
-              <% if ((members.length < organizations[i].chambers[y].maxCapacity) && (members.length != 0)) {%>
-              <td style="font-weight: 600; color: green;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </td>
-              <% } else if ((members.length > organizations[i].chambers[y].maxCapacity) && (members.length != 0)) { %>
-                <td style="font-weight: 600; color: red;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </td>
-              <% } else if ((members.length ==  organizations[i].chambers[y].maxCapacity) && (members.length != 0)) { %>
-                <td style="font-weight: 600; color: blue;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </td>
-              <% } else if (members.length ==  0) { %>
-                <td style="font-weight: 600; color: black;"> <%=  members.length + '/' + organizations[i].chambers[y].maxCapacity %> </td>
-              <% } %>
             <td>
             <button class="btn btn-primary" onclick="openForm('updateChamberMembers','<%= organizations[i]._id%>','<%= organizations[i].chambers[y]._id%>', '<%= date %>', '<%= members %>' )"><i class="fas fa-solid fa-wrench"></i></button>
             </td>

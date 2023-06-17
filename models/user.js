@@ -19,6 +19,10 @@ var UserSchema = new mongoose.Schema({
   organizations: {
     type: Array,
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("User", UserSchema);

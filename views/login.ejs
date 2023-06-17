@@ -19,8 +19,8 @@
         </a>
         <h1 class="h3 mb-3 fw-normal">Sign in</h1>
         <% if (messages.error) { %>
-          <div class="error" style="color:red"><%- messages.error %></div>
-          <% } %>
+        <div class="error" style="color: red"><%- messages.error %></div>
+        <% } %>
         <div class="form-floating">
           <input
             type="email"
@@ -58,6 +58,7 @@
           Sign in
         </button>
         <p>New here? <a href="/register">Sign up</a></p>
+        <a href="/forgot-password">Forgot your password?</a>
         <p class="mt-5 mb-3 text-muted">©2023 La Réserve</p>
       </form>
     </main>

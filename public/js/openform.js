@@ -79,6 +79,16 @@ function openForm(type, id, cId, date, members) {
         "Send Email Notification?";
       document.getElementById("actionButton").innerHTML = "Send";
       break;
+    case "removeUser":
+      document.updateForm.action = "/remove-user";
+      document.getElementById("chamberId").value = cId;
+      document.getElementById("orgId").value = id;
+      document.getElementById("selectedDate").value = date;
+      document.getElementById("members").value = members;
+      document.getElementById("formUserInput").hidden = true;
+      document.getElementById("form-title").innerHTML = "Are you sure ?";
+      document.getElementById("actionButton").innerHTML = "Yes";
+      break;
     default:
   }
   document.getElementById("myForm").style.display = "block";

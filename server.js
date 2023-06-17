@@ -20,6 +20,10 @@ const registerService = require("./register-service");
 const MongoStore = require("connect-mongo");
 const expressLayouts = require("express-ejs-layouts");
 const nodemailer = require("nodemailer");
+const sendEmail = require("./send-email");
+const ResetToken = require("./models/reset-token");
+const Token = require("./models/token");
+const crypto = require("crypto");
 
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;
@@ -78,6 +82,88 @@ passport.deserializeUser((userId, done) => {
 //////
 ////// ROUTES
 //////
+
+app.post("/remove-user", async (req, res) => {
+  const organization = await Organization.findOne({
+    _id: req.body.orgId,
+  });
+  if (organization) {
+    const chamber = organization.chambers.find(
+      (chamber) => chamber._id == req.body.chamberId
+    );
+    if (chamber) {
+      const reservation = chamber.reservations.find(
+        (reservation) => reservation._id == req.body.selectedDate
+      );
+      if (reservation) {
+        if (req.body.members.split("@").length - 1 > 1) {
+          reservation.members = [];
+        } else {
+          reservation.members = reservation.members.filter(
+            (member) => member != req.body.members
+          );
+        }
+        if (reservation.members.length == 0) {
+          chamber.reservations.splice(
+            chamber.reservations.findIndex(
+              (reservation) => reservation._id == req.body.selectedDate
+            ),
+            1
+          );
+          organization.chambers.splice(
+            organization.chambers.findIndex(
+              (chamber) => chamber._id == req.body.chamberId
+            ),
+            1
+          );
+          organization.chambers.push(chamber);
+        } else {
+          chamber.reservations.splice(
+            chamber.reservations.findIndex(
+              (reservation) => reservation._id == req.body.selectedDate
+            ),
+            1
+          );
+          chamber.reservations.push(reservation);
+          organization.chambers.splice(
+            organization.chambers.findIndex(
+              (chamber) => chamber._id == req.body.chamberId
+            ),
+            1
+          );
+          organization.chambers.push(chamber);
+        }
+      }
+    }
+  }
+  await organization.save();
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "lareserveproject@gmail.com",
+      pass: "cfzmkqfdjntfpuyw",
+    },
+  });
+  var mailOptions = {
+    from: "lareserveproject@gmail.com",
+    to: req.body.members,
+    subject: "La Reserve Reservation",
+    text: "This email is to inform you that your reservation has been cancelled.",
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      return res.status(500).json(error);
+    } else {
+      return res.send(
+        "<h1>User removed and email sent successfully</h1> <a href='/report'>Go Back</a>"
+      );
+    }
+  });
+});
 
 app.post("/send-email", (req, res) => {
   var transporter = nodemailer.createTransport({
@@ -230,11 +316,11 @@ app.post("/update-chamber-members", async (req, res) => {
       // chamber.reservations.selectedDate = {};
       var reservation = null;
       if (chamber.reservations == undefined) chamber.reservations = [];
-      if (from && to) {
+      if (req.body.from && req.body.to) {
         const reserv = chamber.reservations.findIndex(
           (res) => res.time == fromTo && res.date == selectedDate
         );
-        if (reserv) chamber.reservations.splice(reserv, 1);
+        if (reserv > -1) chamber.reservations.splice(reserv, 1);
         reservation = new Reservation({
           date: selectedDate,
           members: newMembers,
@@ -244,7 +330,7 @@ app.post("/update-chamber-members", async (req, res) => {
         const reserv = chamber.reservations.findIndex(
           (res) => res.date == selectedDate && res.time == "Full Day"
         );
-        if (reserv) chamber.reservations.splice(reserv, 1);
+        if (reserv > -1) chamber.reservations.splice(reserv, 1);
         reservation = new Reservation({
           date: selectedDate,
           members: newMembers,
@@ -461,6 +547,115 @@ app.get("/profile", checkAuthenticated, function (req, res) {
 
 app.get("/subscription", checkAuthenticated, function (req, res) {
   res.render("subscription", { layout: "layouts/dashboard", user: req.user });
+});
+
+app.get("/update-password", checkAuthenticated, (req, res) =>
+  res.render("update-password")
+);
+
+app.post("/update-password", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.user.username });
+    if (user) {
+      user.password = bcrypt.hashSync(
+        req.body.password,
+        bcrypt.genSaltSync(10)
+      );
+      user.save();
+      return res.redirect("/");
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json("Internal Server Error");
+  }
+});
+
+app.get("/forgot-password", (req, res) => res.render("forgot-password"));
+
+app.post("/password-reset", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.body.email });
+    if (!user)
+      return res.status(400).send("user with given email doesn't exist");
+
+    let token = await ResetToken.findOne({ user: user._id });
+    if (!token) {
+      token = await new ResetToken({
+        user: user._id,
+        token: crypto.randomBytes(32).toString("hex"),
+      }).save();
+    }
+
+    const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
+    await sendEmail(
+      user.username,
+      "Click this link to reset your password: ",
+      link
+    );
+
+    res.send("password reset link sent to your email account");
+  } catch (error) {
+    res.send("An error occured");
+    console.log(error);
+  }
+});
+
+app.get("/password-reset/:userId/:token", async (req, res) => {
+  const token = await ResetToken.findOne({
+    user: req.params.userId,
+    token: req.params.token,
+  });
+  if (!token) return res.status(400).send("Invalid link or expired");
+  else
+    res.render("reset-password.ejs", {
+      userId: req.params.userId,
+      token: req.params.token,
+    });
+});
+
+app.post("/password-reset/:userId/:token", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) return res.status(400).send("invalid link or expired");
+
+    const token = await ResetToken.findOne({
+      user: user._id,
+      token: req.params.token,
+    });
+    if (!token) return res.status(400).send("Invalid link or expired");
+
+    user.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+    await user.save();
+    await ResetToken.deleteOne(token);
+
+    res.send(
+      "password changed sucessfully. <a href=" + "/login" + ">Back to login</a>"
+    );
+  } catch (error) {
+    res.send("An error occured");
+    console.log(error);
+  }
+});
+
+app.get("/verify/:id/:token", async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    if (!user) return res.status(400).send("Invalid link");
+
+    const token = await Token.findOne({
+      user: user._id,
+      token: req.params.token,
+    });
+    if (!token) return res.status(400).send("Invalid link");
+
+    user.verified = true;
+    await user.save();
+    await Token.findByIdAndRemove(token._id);
+
+    res.send("email verified sucessfully");
+  } catch (error) {
+    res.status(400).send("An error occured");
+  }
 });
 
 app.listen(port, () => console.log(`Server started on port ${port}!`));

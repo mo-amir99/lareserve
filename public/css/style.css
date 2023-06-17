@@ -82,6 +82,23 @@ h3 {
   text-align: center;
 }
 
+.msg-holder {
+  text-align: center;
+  width: 7rem;
+  /* border-radius: 0.7rem; */
+  border-bottom-left-radius: 0.6rem;
+  border-bottom-right-radius: 0.6rem;
+  border-top-left-radius: 0.6rem;
+  margin: 1rem 0;
+  background-color: rgb(240, 240, 240);
+  float: left;
+}
+
+.msg {
+  text-decoration: none;
+  color: black;
+}
+
 #pricing {
   padding: 4rem 10%;
 }
@@ -96,6 +113,26 @@ h3 {
 #testimonialscarousel {
   padding: 7% 15%;
   margin-bottom: 5rem;
+}
+
+
+.bubble:hover a img {
+  transform: rotate(360deg);
+  transition: all 0.3s ease-in-out 0s;
+}
+
+.bubble .msg {
+  display: none;
+}
+
+.bubble:hover .msg {
+  display: contents;
+}
+
+.bubble:hover div {
+  display: inline;
+  transform: translate(-1rem, 0);
+  transition: all 0.3s ease-in-out 0s;
 }
 
 .testimonial-image {
@@ -127,4 +164,22 @@ h3 {
 
 .ab_text {
   text-align: center;
+}
+
+
+.b-img {
+  border-radius: 100%;
+  width: 3.5rem;
+}
+
+.bubble {
+  align-items: center;
+  bottom: 21px;
+  right: 23px;
+  opacity: 1;
+  transition: opacity 0.5s ease 0s;
+  box-sizing: border-box;
+  direction: ltr;
+  position: fixed;
+  z-index: 99999;
 }

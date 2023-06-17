@@ -15,7 +15,7 @@
         <% if (organizations[i].chambers[y].reservations != undefined) {%>
           <h5 id="<%= organizations[i].chambers[y].name %>"><%= organizations[i].chambers[y].name %></h5>
               <% for(var z=0; z<organizations[i].chambers[y].reservations.length; z++) {%>
-                <% if(organizations[i].chambers[y].reservations[z].date == date) {%>
+                <% if(organizations[i].chambers[y].reservations[z].date == date && organizations[i].chambers[y].reservations[z].members.length >0) {%>
                   <div class="table-responsive"></div>
           <table class="table table-hover">
             <thead>
@@ -27,14 +27,18 @@
             </thead>
             <tbody>
               <% for(var x=0; x<organizations[i].chambers[y].reservations[z].members.length; x++) { %>
+              <br>
                 <tr>
                   <td><%= organizations[i].chambers[y].reservations[z].time %></td>
                   <td style="min-width: 200px;">
                       <%= organizations[i].chambers[y].reservations[z].members[x]%>
                   </td>
-                  <td><button class="btn btn-primary" onclick="openForm('sendEmail', '<%= organizations[i].name %>','<%= organizations[i].chambers[y].name %>', '<%= date %>', '<%= organizations[i].chambers[y].reservations[z].members[x] %>')"><i class="fas fa-solid fa-trash"></i></button></td>
+                  <td><button class="btn btn-primary" onclick="openForm('removeUser', '<%= organizations[i]._id %>','<%= organizations[i].chambers[y]._id %>', '<%= organizations[i].chambers[y].reservations[z]._id %>', '<%= organizations[i].chambers[y].reservations[z].members[x] %>')"><i class="fas fa-solid fa-trash"></i></button></td>
                   </tr>
                   <% } %>
+                  <button class="btn btn-primary" onclick="openForm('sendEmail', '<%= organizations[i].name %>','<%= organizations[i].chambers[y].name %>', '<%= date %>', '<%= organizations[i].chambers[y].reservations[z].members %>')">Send Emails</button>
+                  <button class="btn btn-primary" style="margin-left: 10px;" onclick="openForm('removeUser', '<%= organizations[i]._id %>','<%= organizations[i].chambers[y]._id %>', '<%= organizations[i].chambers[y].reservations[z]._id %>', '<%= organizations[i].chambers[y].reservations[z].members %>')">Cancel Reservation</button>
+                  <button class="btn btn-primary" style="margin-left: 10px;" onclick="openForm('copySch', '<%= organizations[i]._id %>','<%= organizations[i].chambers[y]._id %>', '<%= organizations[i].chambers[y].reservations[z]._id %>')">Copy Reservation</button>
                   <% } %>
               <% } %>
             </tbody>
