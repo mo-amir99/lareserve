@@ -3,6 +3,7 @@ const User = require("./models/user");
 const bcrypt = require("bcrypt");
 const sendEmail = require("./send-email");
 const Token = require("./models/token");
+const crypto = require("crypto");
 
 module.exports = async (req, res) => {
   const userName = req.body.username.toLowerCase();
