@@ -128,6 +128,15 @@
           <input type="text" name="chamberId" id="chamberId" hidden>
           <input type="text" name="selectedDate" id="selectedDate" hidden>
           <input type="text" name="members" id="members" hidden>
+          <select name="chambers" id="chambers" hidden>
+            <!-- <option value="">Select Chamber</option> -->
+            <% if(locals.organizations) {%>
+              <% organizations.forEach(element => {%>
+                <% element.chambers.forEach(chamber => { %>
+                  <option value='<%=element._id+","+chamber._id%>'</option><%=element.name+ " "+chamber.name%></option>
+                <% }) %>
+              <% }) }%>
+          </select>
           <br>
           <br>
           <button id="actionButton" type="submit" class="btn btn-primary">Update</button>

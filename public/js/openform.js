@@ -75,6 +75,7 @@ function openForm(type, id, cId, date, members) {
       document.getElementById("selectedDate").value = date;
       document.getElementById("members").value = members;
       document.getElementById("formUserInput").hidden = true;
+      document.getElementById("chambers").hidden = true;
       document.getElementById("form-title").innerHTML =
         "Send Email Notification?";
       document.getElementById("actionButton").innerHTML = "Send";
@@ -86,8 +87,22 @@ function openForm(type, id, cId, date, members) {
       document.getElementById("selectedDate").value = date;
       document.getElementById("members").value = members;
       document.getElementById("formUserInput").hidden = true;
+      document.getElementById("chambers").hidden = true;
       document.getElementById("form-title").innerHTML = "Are you sure ?";
       document.getElementById("actionButton").innerHTML = "Yes";
+      break;
+    case "copySch":
+      document.updateForm.action = "/copySch";
+      document.getElementById("chamberId").value = cId;
+      document.getElementById("orgId").value = id;
+      document.getElementById("selectedDate").value = date;
+      document.getElementById("members").value =
+        document.getElementById("chambers").value;
+      document.getElementById("formUserInput").hidden = true;
+      document.getElementById("chambers").hidden = false;
+      document.getElementById("form-title").innerHTML =
+        "Choose a chamber to copy to";
+      document.getElementById("actionButton").innerHTML = "Copy";
       break;
     default:
   }

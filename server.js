@@ -285,6 +285,54 @@ app.post("/add-chamber", async (req, res) => {
   }
 });
 
+app.post("/copySch", async (req, res) => {
+  var reserv;
+  members = req.body.members.toString().split(",");
+  data = new Array();
+  for (let i = 0; i < members.length; i++) {
+    if (members[i] != null) {
+      data.push(members[i]);
+    }
+  }
+  const organization = await Organization.findOne({
+    _id: req.body.orgId,
+  });
+  if (organization) {
+    const chamber = await organization.chambers.find(
+      (chamber) => chamber._id == req.body.chamberId
+    );
+    if (chamber) {
+      reserv = await chamber.reservations.find(
+        (r) => r._id == req.body.selectedDate
+      );
+    } else {
+      return res.status(500).json("Internal Server Error");
+    }
+  } else {
+    return res.status(500).json("Internal Server Error");
+  }
+  const toOrganization = await Organization.findOne({
+    _id: data[0],
+  });
+  if (toOrganization) {
+    const toChamber = await toOrganization.chambers.find(
+      (chamber) => chamber._id == data[1]
+    );
+    if (toChamber) {
+      if (toChamber.reservations == undefined) toChamber.reservations = [];
+      toChamber.reservations.push(reserv);
+      toOrganization.chambers.pull(toChamber);
+      toOrganization.chambers.push(toChamber);
+      toOrganization.save();
+    } else {
+      return res.status(500).json("Internal Server Error");
+    }
+  } else {
+    return res.status(500).json("Internal Server Error");
+  }
+  return res.redirect("/report");
+});
+
 app.post("/update-chamber-members", async (req, res) => {
   const organization = await Organization.findOne({
     _id: req.body.orgId,

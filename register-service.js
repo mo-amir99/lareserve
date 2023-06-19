@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const User = require("./models/user");
 const bcrypt = require("bcrypt");
+const sendEmail = require("./send-email");
+const Token = require("./models/token");
+
 module.exports = async (req, res) => {
   const userName = req.body.username.toLowerCase();
   try {
@@ -23,7 +26,13 @@ module.exports = async (req, res) => {
       username: userName,
       password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
     });
+    let token = await new Token({
+      user: user._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    }).save();
     await user.save();
+    const message = `Click this link to verify your email ${process.env.BASE_URL}/verify/${user.id}/${token.token}`;
+    await sendEmail(user.username, "Verify Email", message);
     return res.render("login");
   } catch (err) {
     console.log(err);
