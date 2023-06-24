@@ -151,7 +151,10 @@ app.post("/remove-user", async (req, res) => {
     from: "lareserveproject@gmail.com",
     to: req.body.members,
     subject: "La Reserve Reservation",
-    text: "This email is to inform you that your reservation has been cancelled.",
+    text:
+      "This email is to inform you that your reservation at " +
+      organization.name +
+      " has been cancelled.",
   };
 
   transporter.sendMail(mailOptions, function (error, info) {

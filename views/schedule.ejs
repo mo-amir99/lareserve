@@ -22,11 +22,8 @@
         <% for(var y=0; y<organizations[i].chambers.length; y++) {%>
           <tr>
             <th scope="row"><%= organizations[i].chambers[y].name %></th>
-            
-              <% members = []; for (const [key, value] of Object.entries(organizations[i].chambers[y].members)) { %>
-               <% key == date ? members.push(...value) : ''} %>
             <td>
-            <button class="btn btn-primary" onclick="openForm('updateChamberMembers','<%= organizations[i]._id%>','<%= organizations[i].chambers[y]._id%>', '<%= date %>', '<%= members %>' )"><i class="fas fa-solid fa-wrench"></i></button>
+            <button class="btn btn-primary" onclick="openForm('updateChamberMembers','<%= organizations[i]._id%>','<%= organizations[i].chambers[y]._id%>', '<%= date %>')"><i class="fas fa-solid fa-wrench"></i></button>
             </td>
           </tr>
        <% } %>
